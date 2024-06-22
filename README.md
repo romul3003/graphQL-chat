@@ -13,4 +13,7 @@ from the client directory
 ```sh
 username: 'alice',
 password: 'alice123',
+
+username: 'bob',
+password: 'bob123',
 ```
