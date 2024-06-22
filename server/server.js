@@ -8,7 +8,7 @@ import { useServer as useWsServer } from 'graphql-ws/lib/use/ws'
 import { createServer as createHttpServer } from 'node:http'
 import { WebSocketServer } from 'ws'
 
-import { authMiddleware, handleLogin } from './auth.js'
+import { authMiddleware, decodeToken, handleLogin } from './auth.js'
 import { resolvers } from './resolvers.js'
 
 const PORT = 9000
@@ -18,9 +18,18 @@ app.use(cors(), express.json())
 
 app.post('/login', handleLogin)
 
-function getContext({ req }) {
+function getHttpContext({ req }) {
   if (req.auth) {
     return { user: req.auth.sub }
+  }
+  return {}
+}
+
+function getWsContext({ connectionParams }) {
+  const accessToken = connectionParams?.accessToken
+  if (accessToken) {
+    const payload = decodeToken(accessToken)
+    return { user: payload.sub }
   }
   return {}
 }
@@ -34,16 +43,13 @@ app.use(
   '/graphql',
   authMiddleware,
   apolloMiddleware(apolloServer, {
-    context: getContext,
+    context: getHttpContext,
   }),
 )
 
 const httpServer = createHttpServer(app)
-const wsServer = new WebSocketServer({
-  server: httpServer,
-  path: '/graphql',
-})
-useWsServer({ schema }, wsServer)
+const wsServer = new WebSocketServer({ server: httpServer, path: '/graphql' })
+useWsServer({ schema, context: getWsContext }, wsServer)
 
 httpServer.listen({ port: PORT }, () => {
   console.log(`Server running on port ${PORT}`)
