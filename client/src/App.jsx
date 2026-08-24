@@ -1,4 +1,4 @@
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import { useState } from 'react';
 import { getUser, logout } from './lib/auth';
 import Chat from './components/Chat';

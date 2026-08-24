@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 const API_URL = 'http://localhost:9000';

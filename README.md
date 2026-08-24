@@ -7,7 +7,7 @@ from the server directory
 
 ## Run client dev mode:
 from the client directory
-`npm run start`
+`npm run dev`
 
 ## login for testing
 ```sh

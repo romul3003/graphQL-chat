@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useSubscription } from '@apollo/client'
+import { useMutation, useQuery, useSubscription } from '@apollo/client/react'
 import { addMessageMutation, messageAddedSubscription, messagesQuery } from './queries'
 
 export function useAddMessage() {
